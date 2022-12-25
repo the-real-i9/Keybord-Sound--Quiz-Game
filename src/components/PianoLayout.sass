@@ -1,0 +1,71 @@
+@import './style-deps'
+
+.piano-layout
+    display: flex
+    width: 100%
+    min-width: 1000px
+.octave
+    flex: 1
+.oct-hd
+    border-radius: 9px 9px 0 0
+    color: #000
+    font-weight: 600
+    text-align: center
+    padding: 5px 0
+    border-bottom: 1px solid #fff
+#m-hd
+    background: #ffdc33
+#b-hd
+    background: #33ffff
+#h-hd
+    background: #ff33b7
+.keys
+    display: flex
+    position: relative
+.key
+    flex: 1
+    background: #fff
+    height: 200px
+    display: flex
+    justify-content: center
+    align-items: flex-end
+    padding-bottom: 10px
+    border: 2px solid #000
+    font-weight: 600
+    border-bottom-left-radius: 9px
+    border-bottom-right-radius: 9px
+#bottom-keys .key:hover
+        background: #d5ffff
+#middle-keys .key:hover
+        background: #fff8d5
+#high-keys .key:hover
+        background: #ffd5f0
+.key-black
+    border-bottom-left-radius: 6px
+    border-bottom-right-radius: 6px
+    position: absolute
+    width: 35px
+    height: 100px
+    background: #000
+    color: #fff
+    display: flex
+    justify-content: center
+    align-items: flex-end
+    padding-bottom: 10px
+    font-weight: 600
+    &:hover
+        background: #262626
+.key-black[id*="c_sharp"]
+    left: 9.5%
+.key-black[id*="d_sharp"]
+    left: 9.5% * 2.5
+.key-black[id*="f_sharp"]
+    left: 9.5% * 5.5
+.key-black[id*="g_sharp"]
+    left: 9.5% * 7
+.key-black[id*="a_sharp"]
+    left: 9.5% * 8.5
+
+.piano-layout.label-hidden
+    .key, .key-black
+        color: transparent
