@@ -3,29 +3,17 @@ import AppContext from '../AppContext'
 import './PianoLayout.sass'
 
 function PianoLayout({ hideLabel }) {
-    const { page } = useContext(AppContext)
-    const keys = [
-        {audiofile: "../assets/piano-keys/bottom_c.mp3", name: "bottom_c"}
-    ]
+    const { page, audBuffers } = useContext(AppContext)
+    
 
     useEffect(() => {
         const audioCtx = new AudioContext()
-        const audBuffers = {};
-        ['c', 'c_sharp', 'd', 'd_sharp', 'e', 'f', 'f_sharp', 'g', 'g_sharp', 'a', 'a_sharp', 'b'].forEach((keyVal) => {
-            ['bottom', 'middle', 'high'].forEach(async (octVal) => {
-                const file = await fetch(`/src/assets/piano-keys/${octVal}_${keyVal}.mp3`, { credentials: 'same-origin' })
-                const data = await file.arrayBuffer()
-                const audioBuffer = await audioCtx.decodeAudioData(data)
-                audBuffers[`${octVal}_${keyVal}`] = audioBuffer
-            })
-            })
-
+        
         const listener = (ev) => {
-            const source = audioCtx.createBufferSource()
-            source.buffer = audBuffers[ev.target.id]
-            source.connect(audioCtx.destination)
-
             if (page === 'learningArena') {
+                const source = audioCtx.createBufferSource()
+                source.buffer = audBuffers[ev.target.id]
+                source.connect(audioCtx.destination)
                 source.start(0, 0.5)
             }
         }

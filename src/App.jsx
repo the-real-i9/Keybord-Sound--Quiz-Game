@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import HomePage from './components/HomePage'
 import './App.sass'
 import AppContext from './AppContext'
@@ -7,9 +7,24 @@ import TrainingArena from './components/TrainingArena'
 
 function App() {
   const [page, setPage] = useState('home')
+  // const [audioCtx, setAuidoCtx] = useState()
+  const audBuffers = useRef({})
+  
+  useEffect(() => {
+    const audioCtx = new AudioContext();
+
+    ['c', 'c_sharp', 'd', 'd_sharp', 'e', 'f', 'f_sharp', 'g', 'g_sharp', 'a', 'a_sharp', 'b'].forEach((keyVal) => {
+      ['bottom', 'middle', 'high'].forEach(async (octVal) => {
+        const file = await fetch(`/src/assets/piano-keys/${octVal}_${keyVal}.mp3`, { credentials: 'same-origin' })
+        const data = await file.arrayBuffer()
+        const audioBuffer = await audioCtx.decodeAudioData(data)
+        audBuffers.current[`${octVal}_${keyVal}`] = audioBuffer
+      })
+    })
+  }, [])
 
   return (
-    <AppContext.Provider value={{ page, setPage }}>
+    <AppContext.Provider value={{ page, setPage, audBuffers: audBuffers.current }}>
       <div className="app-wrapper">
         {page === 'home' ? <HomePage /> : page === 'learningArena' ? <LearningArena /> : page === 'trainingArena' ? <TrainingArena /> : null}
       </div>
