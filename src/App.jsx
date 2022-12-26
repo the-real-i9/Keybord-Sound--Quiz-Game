@@ -7,7 +7,6 @@ import TrainingArena from './components/TrainingArena'
 
 function App() {
   const [page, setPage] = useState('home')
-  // const [audioCtx, setAuidoCtx] = useState()
   const audBuffers = useRef({})
   
   useEffect(() => {
@@ -15,7 +14,7 @@ function App() {
 
     ['c', 'c_sharp', 'd', 'd_sharp', 'e', 'f', 'f_sharp', 'g', 'g_sharp', 'a', 'a_sharp', 'b'].forEach((keyVal) => {
       ['bottom', 'middle', 'high'].forEach(async (octVal) => {
-        const file = await fetch(`/src/assets/piano-keys/${octVal}_${keyVal}.mp3`, { credentials: 'same-origin' })
+        const file = await fetch(`/src/assets/piano-keys/${octVal}_${keyVal}.mp3`)
         const data = await file.arrayBuffer()
         const audioBuffer = await audioCtx.decodeAudioData(data)
         audBuffers.current[`${octVal}_${keyVal}`] = audioBuffer
