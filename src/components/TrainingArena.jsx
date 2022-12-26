@@ -13,7 +13,7 @@ function TrainingArena() {
 
     const [countdown, setCountdown] = useState(null)
 
-    const randKey = useRef(null)
+    const randKeys = useRef([])
 
     useEffect(() => {
         const cntdwn = setInterval(() => {
@@ -29,33 +29,64 @@ function TrainingArena() {
 
     useEffect(() => {
         const audioCtx = new AudioContext()
+        const playKey_s = () => {
+            if (randKeys.current.length) {
+                // since we can have multiple keys play the combination one after the other
+                // we use a recursive function to loop through the randKeys array
+                let i = 0
+                const playKey = () => {
+                    const source = audioCtx.createBufferSource()
+                    source.buffer = audBuffers[randKeys.current[i]]
+                    source.connect(audioCtx.destination)
 
-        const repeatRandKey = setInterval(() => {
-            if (randKey.current) {
-                const source = audioCtx.createBufferSource()
-                source.buffer = audBuffers[randKey.current]
-                source.connect(audioCtx.destination)
-                source.start(0, 0.5)
+                    // meanwhile if we're yet to arrive at the last key, we won't complete the time of a key before we end it
+                    // but if it's the last key in the interval, let it play till the end
+                    // this makes it feel like a natural interval played
+                    if (i === notesCountValue - 1) {
+                        source.start(0, 0.5) // play till the end
+                    } else {
+                        source.start(0, 0.5, 0.7) // play up till 0.7s
+                    }
+                    
+                    // we listen for the an end event on one key, then we call the function again for the next key
+                    // if we are on the last key, we rollover to the first key, and call the function for it
+                    source.onended = () => {
+                        if (notesCountValue === i+1) {
+                            i = 0
+                            return
+                        }
+                        i++
+                        playKey()
+                    }
+                }
+                playKey()
             }
-        }, 2000)
+        }
+        playKey_s()
+        const repeatRandKey = setInterval(() => {
+            playKey_s()
+        }, 1500 * notesCountValue)
 
         return () => {
             clearInterval(repeatRandKey)
         }
-    }, [randKey.current])
+    }, [randKeys.current])
 
     const playRandKey = () => {
         const keys = [...Object.keys(audBuffers)]
         // select a random key
-        const rk = keys[Math.trunc(Math.random() * keys.length)]
+        const rks = []
+        for (let i = 0; i < notesCountValue; i++) {
+            rks.push(keys[Math.trunc(Math.random() * keys.length)])
+        }
         // set the random key into randKey.current
-        randKey.current = rk
+        randKeys.current = rks
 
     }
 
     const stopGame = () => {
         setGameStart(false)
-        randKey.current = null
+        randKeys.current = []
     }
 
     const startGame = () => {
