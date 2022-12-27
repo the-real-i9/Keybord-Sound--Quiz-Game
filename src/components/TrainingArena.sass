@@ -44,8 +44,14 @@
         button
             @include proceed-btn
             margin-top: -3px
-    .game-director
-        .countdown, .timesup
+    .referee_userchv
+        display: flex
+        width: 100%
+        > div
+            flex: 1
+            &:nth-child(2)
+                flex: .5
+        .countdown, .timesup, .correct-streak-count, .user-choice-val
             font-size: 20px
             font-weight: 900
         .timesup

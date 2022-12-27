@@ -15,6 +15,13 @@ function TrainingArena() {
 
     const randKeys = useRef([])
 
+    const [oneKey, setOneKey] = useState('')
+    const [comboKeys, setComboKeys] = useState([])
+    const [remark, setRemark] = useState('')
+    const [correctStreak, setCorrectStreak] = useState(0)
+
+    /*  */
+
     useEffect(() => {
         const cntdwn = setInterval(() => {
             if (gameStart) {
@@ -47,11 +54,11 @@ function TrainingArena() {
                     } else {
                         source.start(0, 0.5, 0.7) // play up till 0.7s
                     }
-                    
+
                     // we listen for the an end event on one key, then we call the function again for the next key
                     // if we are on the last key, we rollover to the first key, and call the function for it
                     source.onended = () => {
-                        if (notesCountValue === i+1) {
+                        if (notesCountValue === i + 1) {
                             i = 0
                             return
                         }
@@ -63,6 +70,7 @@ function TrainingArena() {
             }
         }
         playKey_s()
+        /*  */
         const repeatRandKey = setInterval(() => {
             playKey_s()
         }, 1500 * notesCountValue)
@@ -84,9 +92,73 @@ function TrainingArena() {
 
     }
 
+    const handlePianoKeyPress = (ev) => {
+        if (!gameStart) return
+        const keys = [...Object.keys(audBuffers)]
+        if (keys.includes(ev.target.id)) {
+            if (notesCountValue === 1) {
+                setOneKey(ev.target.id)
+                if (randKeys.current[0] === ev.target.id) {
+                    setRemark('green')
+                    // increase correct streak
+                    setCorrectStreak((prev) => prev + 1)
+
+                    setTimeout(() => {
+                        setOneKey('')
+                        setRemark('')
+                        // restart time
+                        setCountdown(countdownTimeValue * notesCountValue)
+                        // the key matches, execute the next random key
+                        playRandKey()
+                    }, 1000)
+                } else {
+                    setRemark('red')
+                    setCorrectStreak(0)
+                    // send a wrong remark
+                }
+            } else if (notesCountValue > 1) {
+                setComboKeys((prev) => {
+                    if (randKeys.current.length === prev.length) {
+                        const newComboKeys = [ev.target.id]
+                        setRemark('')
+                        return newComboKeys
+                    } else {
+                        const upComboKeys = [...prev, ev.target.id]
+                        if (randKeys.current.length === upComboKeys.length) {
+                            if (randKeys.current.toString() === upComboKeys.toString()) {
+                                setRemark('green')
+                                // increase correct streak
+                                setCorrectStreak((prev) => prev + 1)
+
+                                setTimeout(() => {
+                                    setComboKeys([])
+                                    setRemark('')
+                                    // restart time
+                                    setCountdown(countdownTimeValue * notesCountValue)
+                                    // the key matches, execute the next random key
+                                    playRandKey()
+                                }, 1000)
+                            } else {
+                                setRemark('red')
+                                setCorrectStreak(0)
+                                // send a wrong remark
+                            }
+                        }
+                        return upComboKeys
+                    }
+                })
+
+            }
+        }
+    }
+
+
     const stopGame = () => {
         setGameStart(false)
         randKeys.current = []
+        setOneKey('')
+        setComboKeys([])
+        setRemark('')
     }
 
     const startGame = () => {
@@ -97,15 +169,6 @@ function TrainingArena() {
         })
         playRandKey()
     }
-
-    const handlePianoPress = (ev) => {
-        console.log(ev.target)
-        // listen for the key the user presses
-        // if (wrong) keep playing the same key
-        // if (right)
-    }
-
-
 
     useEffect(() => {
         if (countdown === 0) stopGame()
@@ -138,16 +201,30 @@ function TrainingArena() {
                     <span>Hide Label:</span>
                     <input type="checkbox" checked={hideLabel} onChange={(ev) => setHideLabel(ev.target.checked)} />
                 </div>
-                <button onClick={gameSwitch}>{gameStart ? "Stop" : "Start"} <span className="goto-icon"><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><rect width="256" height="256" fill="none" /><circle cx="128" cy="128" r="96" fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="12" /><polyline points="88 160 120 128 88 96" fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="12" /><polyline points="144 160 176 128 144 96" fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="12" /></svg></span></button>
+                <button onClick={gameSwitch}>{gameStart ? "Stop" : countdown === 0 ? "Try again" : "Start"} <span className="goto-icon"><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><rect width="256" height="256" fill="none" /><circle cx="128" cy="128" r="96" fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="12" /><polyline points="88 160 120 128 88 96" fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="12" /><polyline points="144 160 176 128 144 96" fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="12" /></svg></span></button>
             </div>
-            <div className="game-director">
-                {countdown === 0 ? <p className="timesup">Time's Up</p> :
-                    <Fragment>
+            <div className="referee_userchv">
+                <div className="referee-timing">
+                    {countdown === 0 ? <p className="timesup">Time's Up</p> : null}
+                    {countdown !== 0 ? <Fragment>
                         <p><strong>Instructor:</strong> Press the key of the note playing in</p>
                         <div className="countdown">{!gameStart ? "..." : `${countdown}s`}</div>
-                    </Fragment>}
+                    </Fragment> : null}
+                </div>
+                <div className="correct-streak">
+                    Streak:
+                    <div className='correct-streak-count'>{correctStreak}</div>
+                </div>
+                <div className="user-choice-validation">
+                    User Choice:
+                    <div className='user-choice-val'>
+                        {oneKey ? <div style={{ color: remark }}>{document.getElementById(oneKey).textContent}</div> : null}
+                        {comboKeys.length ? <div style={{ color: remark }}>{comboKeys.map((v) => document.getElementById(v).textContent).join("-")}</div> : null}
+                    </div>
+                </div>
+
             </div>
-            <div onClick={handlePianoPress} className="piano-layout_wrapper">
+            <div onClick={handlePianoKeyPress} className="piano-layout_wrapper">
                 <PianoLayout hideLabel={hideLabel} />
             </div>
             <div className="goto-learn">
