@@ -216,10 +216,10 @@ function TrainingArena() {
                     <div className='correct-streak-count'>{correctStreak}</div>
                 </div>
                 <div className="user-choice-validation">
-                    User Choice:
+                    Your Choice:
                     <div className='user-choice-val'>
-                        {oneKey ? <div style={{ color: remark }}>{document.getElementById(oneKey).textContent}</div> : null}
-                        {comboKeys.length ? <div style={{ color: remark }}>{comboKeys.map((v) => document.getElementById(v).textContent).join("-")}</div> : null}
+                        {oneKey ? <div style={{ color: remark }}>{`${oneKey[0]}_${document.getElementById(oneKey).textContent}`}</div> : null}
+                        {comboKeys.length ? <div style={{ color: remark }}>{comboKeys.map((v) => `${v[0]}_${document.getElementById(v).textContent}`).join(" + ")}</div> : null}
                     </div>
                 </div>
 
