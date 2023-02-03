@@ -47,14 +47,17 @@
     .referee_userchv
         display: flex
         width: 100%
+        height: 80px
         > div
             flex: 1
             &:nth-child(2)
                 flex: .5
+            &:not(:last-child)
+                margin-right: 10px
         .countdown, .timesup, .correct-streak-count
             font-size: 20px
             font-weight: 900
-        .user-choice-val
+        .user-choice-val, .corr-ans
             font-size: 20px
         .timesup
             color: red
