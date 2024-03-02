@@ -4,8 +4,9 @@
     display: flex
     width: 100%
     min-width: 1000px
+    justify-content: center
 .octave
-    flex: 1
+    // flex: 1
 .oct-hd
     border-radius: 9px 9px 0 0
     color: #000
@@ -23,7 +24,8 @@
     display: flex
     position: relative
 .key
-    flex: 1
+    // flex: 1
+    width: 60px
     background: #fff
     height: 200px
     display: flex
@@ -44,7 +46,7 @@
     border-bottom-left-radius: 6px
     border-bottom-right-radius: 6px
     position: absolute
-    width: 35px
+    width: 40px
     height: 100px
     background: #000
     color: #fff
@@ -55,16 +57,41 @@
     font-weight: 600
     &:hover
         background: #262626
-.key-black[id*="c_sharp"]
-    left: 9.5%
-.key-black[id*="d_sharp"]
-    left: 9.5% * 2.5
-.key-black[id*="f_sharp"]
-    left: 9.5% * 5.5
-.key-black[id*="g_sharp"]
+        
+// .key-black[id*="c_sharp"]
+//     left: 9.5%
+// .key-black[id*="d_sharp"]
+//     left: 9.5% * 2.5
+// .key-black[id*="f_sharp"]
+//     left: 9.5% * 5.5
+// .key-black[id*="g_sharp"]
+//     left: 9.5% * 7
+// .key-black[id*="a_sharp"]
+//     left: 9.5% * 8.5
+
+
+#bottom_f_sharp
+    left: 9.5% * 1.75
+#bottom_g_sharp
+    left: 9.5% * 4.4
+#bottom_a_sharp
     left: 9.5% * 7
-.key-black[id*="a_sharp"]
+
+#middle_c_sharp
+    left: 9.5%
+#middle_d_sharp
+    left: 9.5% * 2.5
+#middle_f_sharp
+    left: 9.5% * 5.5
+#middle_g_sharp
+    left: 9.5% * 7
+#middle_a_sharp
     left: 9.5% * 8.5
+    
+#high_c_sharp
+    left: 9.5% * 2.3
+#high_d_sharp
+    left: 9.5% * 5.85
 
 .key.correct, .key-black.correct
     background: rgb(64, 221, 64)

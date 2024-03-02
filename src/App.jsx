@@ -12,14 +12,25 @@ function App() {
   useEffect(() => {
     const audioCtx = new AudioContext();
 
-    ['c', 'c_sharp', 'd', 'd_sharp', 'e', 'f', 'f_sharp', 'g', 'g_sharp', 'a', 'a_sharp', 'b'].forEach((keyVal) => {
-      ['bottom', 'middle', 'high'].forEach(async (octVal) => {
+    ['bottom', 'middle', 'high'].forEach(async (octVal) => {
+      (octVal === 'bottom' ? ['f', 'f_sharp', 'g', 'g_sharp', 'a', 'a_sharp', 'b'] 
+      : octVal === 'middle' ? ['c', 'c_sharp', 'd', 'd_sharp', 'e', 'f', 'f_sharp', 'g', 'g_sharp', 'a', 'a_sharp', 'b'] 
+      : ['c', 'c_sharp', 'd', 'd_sharp', 'e']).forEach(async (keyVal) => {
         const file = await fetch(`/src/assets/piano-keys/${octVal}_${keyVal}.mp3`)
         const data = await file.arrayBuffer()
         const audioBuffer = await audioCtx.decodeAudioData(data)
         audBuffers.current[`${octVal}_${keyVal}`] = audioBuffer
       })
     })
+
+    /* ['c', 'c_sharp', 'd', 'd_sharp', 'e', 'f', 'f_sharp', 'g', 'g_sharp', 'a', 'a_sharp', 'b'].forEach((keyVal) => {
+      ['bottom', 'middle', 'high'].forEach(async (octVal) => {
+        const file = await fetch(`/src/assets/piano-keys/${octVal}_${keyVal}.mp3`)
+        const data = await file.arrayBuffer()
+        const audioBuffer = await audioCtx.decodeAudioData(data)
+        audBuffers.current[`${octVal}_${keyVal}`] = audioBuffer
+      })
+    }) */
   }, [])
 
   return (

@@ -35,11 +35,11 @@ function PianoLayout({ hideLabel }) {
             <div className="octave" id="bottom-octave">
                 <div className="oct-hd" id="b-hd">Bottom</div>
                 <div className="keys" id="bottom-keys">
-                    <button className="key bt-key" id="bottom_c">C</button>
+                    {/* <button className="key bt-key" id="bottom_c">C</button>
                     <button className="key-black bt-key-black" id="bottom_c_sharp">C<sup>#</sup></button>
                     <button className="key bt-key" id="bottom_d">D</button>
                     <button className="key-black bt-key-black" id="bottom_d_sharp">D<sup>#</sup></button>
-                    <button className="key bt-key" id="bottom_e">E</button>
+                    <button className="key bt-key" id="bottom_e">E</button> */}
                     <button className="key bt-key" id="bottom_f">F</button>
                     <button className="key-black bt-key-black" id="bottom_f_sharp">F<sup>#</sup></button>
                     <button className="key bt-key" id="bottom_g">G</button>
@@ -74,13 +74,13 @@ function PianoLayout({ hideLabel }) {
                     <button className="key hg-key" id="high_d">D</button>
                     <button className="key-black hg-key-black" id="high_d_sharp">D<sup>#</sup></button>
                     <button className="key hg-key" id="high_e">E</button>
-                    <button className="key hg-key" id="high_f">F</button>
+                    {/* <button className="key hg-key" id="high_f">F</button>
                     <button className="key-black hg-key-black" id="high_f_sharp">F<sup>#</sup></button>
                     <button className="key hg-key" id="high_g">G</button>
                     <button className="key-black hg-key-black" id="high_g_sharp">G<sup>#</sup></button>
                     <button className="key hg-key" id="high_a">A</button>
                     <button className="key-black hg-key-black" id="high_a_sharp">A<sup>#</sup></button>
-                    <button className="key hg-key" id="high_b">B</button>
+                    <button className="key hg-key" id="high_b">B</button> */}
                 </div>
             </div>
         </div>
